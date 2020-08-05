@@ -211,51 +211,39 @@ Below are some empty tables to be used to normalize the database
 
 Table Name: Pets
 
-| Pet_id     | name       | type       |            |            |            |            |            |            |
-|------------|------------|------------|------------|------------|------------|------------|------------|------------|
-| 1          | Ellie      | Dog        |            |            |            |            |            |            |
-| 2          | Joe        | Horse      |            |            |            |            |            |            |
-| 3          | Ginger     | Dog        |            |            |            |            |            |            |
-| 4          | Tiger      | Cat        |            |            |            |            |            |            |
-| 5          | Miss Kitty | Cat        |            |            |            |            |            |            |
-| 6          | Toby       | Turtle     |            |            |            |            |            |            |
-| 7          | Bubble     | Fish       |            |            |            |            |            |            |
+| Pet_id     | name       | type       |
+|------------|------------|------------|
+| 1          | Ellie      | Dog        |
+| 2          | Joe        | Horse      |
+| 3          | Ginger     | Dog        |
+| 4          | Tiger      | Cat        |
+| 5          | Miss Kitty | Cat        |
+| 6          | Toby       | Turtle     |
+| 7          | Bubble     | Fish       |
 
 Table Name: Person
 
-| person_id  | name       | has_yard   | is_in_city |            |            |            |            |            |
-|------------|------------|------------|------------|------------|------------|------------|------------|------------|
-| 1          | Jane       | No         | Yes        |            |            |            |            |            |
-| 2          | Bob        | No         | No         |            |            |            |            |            |
-| 3          | Sam        | Yes        | No         |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+| person_id  | name       | has_yard   | is_in_city |
+|------------|------------|------------|------------|
+| 1          | Jane       | No         | Yes        |
+| 2          | Bob        | No         | No         |
+| 3          | Sam        | Yes        | No         |
+|            |            |            |            |
+|            |            |            |            |
+|            |            |            |            |
+|            |            |            |            |
 
 Table Name: Pet Owner
 
-|pet_owner_id| person     | pet        |            |            |            |            |            |            |
-|------------|------------|------------|------------|------------|------------|------------|------------|------------|
-| 1          | 1          | 1          |            |            |            |            |            |            |
-| 2          | 1          | 4          |            |            |            |            |            |            |
-| 3          | 1          | 6          |            |            |            |            |            |            |
-| 4          | 2          | 2          |            |            |            |            |            |            |
-| 5          | 3          | 3          |            |            |            |            |            |            |
-| 6          | 3          | 5          |            |            |            |            |            |            |
-| 7          | 3          | 7          |            |            |            |            |            |            |
-
-Table Name:
-
-|            |            |            |            |            |            |            |            |            |
-|------------|------------|------------|------------|------------|------------|------------|------------|------------|
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
-|            |            |            |            |            |            |            |            |            |
+|pet_owner_id| person     | pet        |
+|------------|------------|------------|
+| 1          | 1          | 1          |
+| 2          | 1          | 4          |
+| 3          | 1          | 6          |
+| 4          | 2          | 2          |
+| 5          | 3          | 3          |
+| 6          | 3          | 5          |
+| 7          | 3          | 7          |
 
 ---
 
@@ -264,7 +252,12 @@ Table Name:
 * [ ] ***delete all customers that have no orders. Should delete 2 (or 3 if you haven't deleted the record added) records***
 
 ```SQL
-
+DELETE
+FROM customers c
+WHERE
+   (SELECT COUNT(o.order_id)
+		 FROM orders o
+		 WHERE o.customer_id = c.customer_id) < 1
 ```
 
 * [ ] ***Create Database and Table: After creating the database, tables, columns, and constraint, generate the script necessary to recreate the database. This script is what you will submit for review***
@@ -282,7 +275,22 @@ Table Name:
   * account `budget` is required.
 
 ```SQL
+-- Table: public.accounts
 
+-- DROP TABLE public.accounts;
+
+CREATE TABLE public.accounts
+(
+    id integer NOT NULL,
+    name character varying COLLATE pg_catalog."default" NOT NULL,
+    budget bigint,
+    CONSTRAINT accounts_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.accounts
+    OWNER to postgres;
 ```
 
 To see the script
